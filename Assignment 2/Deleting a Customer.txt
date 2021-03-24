@@ -1,0 +1,3 @@
+To delete a customer from the customers table, you'd first have to delete all related records from the related tables. As an example walk through, let's say I want to delete customer_id 1. I'd have to delete their orders from the orders table. But to delete those orders, I'd have to delete the related order_details. 
+
+I would match the orders to customers on customer_id. And then I'd match the order_details to orders on order_id. That would return all the order_details, which I could delete. Then I could delete all the orders. Then I could delete the customer. 
