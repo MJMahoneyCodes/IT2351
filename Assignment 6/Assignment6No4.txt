@@ -1,0 +1,19 @@
+To create an event that runs once a year to show you products that haven't been ordered in the past year, you first have to have event_scheduler set to ON.
+
+Then you set the event to run on a schedule of every 1 year starting on January 1st of the next year. 
+
+As the event itself, you would have it create a table listing out the product_ids (and whatever other data you also want to include) that are not in all of the products that have been ordered in the last year. 
+
+You could do this using a subquery that first finds all the products that were ordered in the last year. Then the main query would find product_id NOT IN that subquery.
+
+A sample SQL query to return those products might look like this:
+
+SELECT product_id FROM products
+WHERE product_id NOT IN (
+	SELECT p.product_id FROM products p
+		JOIN order_items oi ON p.product_id = oi.product_id
+		JOIN orders o ON o.order_id = oi.order_id
+		WHERE o.order_date BETWEEN NOW() - INTERVAL 1 YEAR AND NOW());
+
+When this runs every January 1st, the value of NOW() will be January 1st of the current year. The dates returned in the query would be between January 1st one year ago and now.
+ 
